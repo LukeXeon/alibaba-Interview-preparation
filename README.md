@@ -250,10 +250,12 @@ GC Roots有这些:
 非线程安全
 
 ### ConcurrentHashMap
+可并发的
 
-
+[没错又是薛8,他很强...](https://juejin.im/post/5c8276216fb9a049d51a4cd6)
 ### WeakHashMap
 非线程安全
+
 ### ThreadLocal
 
 

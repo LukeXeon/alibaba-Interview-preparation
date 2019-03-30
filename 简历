@@ -1,0 +1,84 @@
+# 罗庭辉
+
+## Android开发工程师
+
+- 联系电话: +86 18907738297
+- 电子邮箱: [694014820@qq.com](694014820@qq.com)
+- 个人博客: 
+- - [掘金](https://juejin.im/user/5bbee0e86fb9a05d0e2e8617/posts)
+- - [CSDN](https://blog.csdn.net/qq_36584063)
+- GitHub: [LukeXeon](https://github.com/LukeXeon)
+
+## 自我描述
+
+* 我是一名热爱`开源`的`Android`开发者，觉得开源既方便了自己也方便了他人，让软件开发变得更加容易。
+* 我追求开发`高质量`、`可维护`以及`稳定`的应用，所以我比较喜欢使用`Google`推出的实用新框架`Jetpack`来开发自己所接手的项目，并在其中实践`MVVM`。在开发时总会思考极端情况（比如重复点击、`MIUI`和`5.0`以下容易出现的各种问题），并为其做出兼容方案。自己在闲暇时间也喜欢看源码，看过一些开源框架的源码以及部分`Jetpack`中有关`MVVM`部分的源码。
+* 独立开发依赖注入框架->[Liteproj](https://github.com/LukeXeon/Liteproj)，并在`Github`上开源，它提供在`Android`上提供了一种更类似与`Spring`的依赖注入方式。并且将一个轻量级的`C`脚本解释器picoc移植到了Android上->[ScriptRuntime](https://github.com/LukeXeon/ScriptRuntime)，并为其编写了接近于`JDK`实现的`JNI`接口。自己基本上每天都有坚持编程的习惯，在过去的六个月中`Github`提交数量`400+`。
+* 虽然目前我`Android`方向时我的主攻方向，但其实我学习`Android`的时间并不很长，至今也只有半年出头的而已，之前一直从事`Unity3d`游戏开发，所以学习过`C++`，`C#`，在大三上的寒假正式转型开始研究`Android`开发。由于学习过`C#`，所以花了大概一个星期就入门了`Java`。虽然是半路出家，但时自己的学习速度很快，每天都会看大量的文章和书籍，时下热门的技术基本上都略懂一二，并且由于`Java`中的很多概念`C#`中也存在，所以自己对偏底层的`GC`算法，以及`JNI`也有一定的理解。
+
+## 工作经验
+
+### **Android 开发工程师** 桂林市优创电子科技有限公司（校企）
+
+*2018/10 - 至今*
+
+单独负责《领航员》生态平台`Android`端的开发，其主要经历如下：
+
+* 参与技术选型，调研、总结各种方案的优劣；
+* 参与后台部分逻辑的设计，与后台开发人员共同研究如何合理设计数据库表以及数据传输格式；
+* 参与公共组件的封装，提升组件复用性，从而提升团队开发效率；
+* 起草用户扫码登陆的的流程技术文档，以及绘制三端的流程图；
+* 实践单`Activity`以及`MVVM`模式，让开发出的应用程序即使在非常恶劣的硬件条件下也能按照预期的行为运行。
+
+## 技能专长
+
+以下都是我平时用过或熟悉的编程语言、框架、软件及工具，带 ^†^ 符号的是我比较喜欢和常用的。
+
+### 编程语言
+
+- [Java](https://www.java.com)^†^
+- [C#](https://docs.microsoft.com/zh-cn/dotnet/csharp/)^†^
+- [C/C++](http://www.cplusplus.com)^†^
+- [Kotlin](http://kotlinlang.org)^†^
+- [JavaScript](https://www.javascript.com)
+- [HTML](https://www.w3.org/html)
+- [Lua](https://www.lua.org)
+
+
+### 框架
+- [Android Jetpack](https://github.com/aosp-mirror/platform_frameworks_support)^†^
+- [RxJava](https://github.com/ReactiveX/RxJava)^†^
+- [RxAndroid](https://github.com/ReactiveX/RxAndroid)^†^
+- [ARouter](https://github.com/alibaba/ARouter)^†^
+- [Retrofit](https://github.com/square/retrofit)^†^
+- [Gson](https://github.com/google/gson)^†^
+- [Glide](https://github.com/bumptech/glide)^†^
+- [Liteproj](https://github.com/LukeXeon/Liteproj)^†^
+- [Unity Engine](https://unity3d.com/)^†^
+
+### 工具软件
+- [Android Studio](https://developer.android.com/studio/index.html?hl=zh-cn)^†^
+- [Visual Studio](https://www.visualstudio.com)^†^
+- [Tower](https://tower.im)^†^
+- [Git](https://git-scm.com)^†^
+- [Unity Editor](https://unity3d.com/)^†^
+- [IntelliJ IDEA](https://www.jetbrains.com/idea)
+- [Adobe Photoshop](http://www.adobe.com/cn/products/cs6/photoshop.html)
+
+
+
+## 教育经历
+
+*2016 - 2020* [桂林电子科技大学](https://www.gliet.edu.cn) 软件工程 本科
+
+
+## 个人荣誉
+
+* 蓝桥杯 **省赛二等**；
+* 投稿自己博客的文章被《第一行代码》作者郭霖选中，已经收到确认邮件，将于近期推送；
+* 简历编写时还有其他一些比赛仍在评审阶段。
+
+
+## 兴趣爱好
+
+爱折腾，喜欢探索和尝试没有干过的新鲜事物。业余喜爱看动漫之类的二次元文化或者和一起开发的小伙伴一起打打游戏搞搞团队建设。

@@ -233,24 +233,31 @@ GC Roots有这些:
 ## Android 数据结构
 
 ### 内存管理
-* LRU最近最少使用算法,LruCache内部使用LinkedHashMap实现,是线程安全的
+* LRU最近最少使用算法,LruCache是线程安全的([参考](https://www.jianshu.com/p/68454934d44c))
 * 复用,例子Handler的Message.obtain(),使用链表结构做复用
 
 ### 红黑树
 
-### HashMap
-扩容
+### LinkedHashMap
+非线程安全
 
-### Android中的ArrayMap
+### HashMap
+非线程安全
+
+[请看我朋友薛8的一篇文章](https://ddnd.cn/2019/03/07/jdk1.8-hashmap/)
+
+### ArrayMap
+非线程安全
 
 ### ConcurrentHashMap
 
-### WeakHashMap
 
+### WeakHashMap
+非线程安全
 ### ThreadLocal
 
-## Android Hook
 
+## Android Hook
 ### 启动流程
 [参考文章](https://www.jianshu.com/p/f499afd8d0ab)
 ### Hook点
@@ -354,12 +361,3 @@ public class MainActivity extends AppCompatActivity
 
 #### 屏幕适配方案AndroidAutoSzie
 [AndroidAutoSzie作者自己的文章](https://www.jianshu.com/p/55e0fca23b4f)
-
-
-
-
-
-
-
-
-

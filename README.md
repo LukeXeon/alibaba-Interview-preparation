@@ -49,6 +49,10 @@ Windows读写文件会占用该文件,但Android是Linux所以默认无锁,可�
 ### View绘制流程和点击事件传递
 [参考文章](https://www.jianshu.com/p/cf5092fa2694?utm_source=desktop&utm_medium=timeline)
 
+### View动画
+[参考文章](https://www.jianshu.com/p/609b6d88798d)
+
+其中属性动画适用性最广,不仅可以用于一般的系统和appcompat带有的View,也可以用于自定义View,甚至不是View的地方.
 ### 防止重复点击
 使用RxBinding的RxView,但是使用RxView有个缺点,那就是如果那个View是自定义的,就没办法兼容了,结合RxBinding的源码,使用JDK接口的动态代理和RxJava的PublishSubject实现一口气兼容所有接口
 ```
@@ -229,7 +233,7 @@ GC Roots有这些:
 ## Android 数据结构
 
 ### 内存管理
-* LRU最近最少使用算法
+* LRU最近最少使用算法,LruCache内部使用LinkedHashMap实现,是线程安全的
 * 复用,例子Handler的Message.obtain(),使用链表结构做复用
 
 ### 红黑树
@@ -248,7 +252,7 @@ GC Roots有这些:
 ## Android Hook
 
 ### 启动流程
-Application#attachBaseContext->ContentProvider#onCreate->Application#onCreate->启动第一个Activity
+[参考文章](https://www.jianshu.com/p/f499afd8d0ab)
 ### Hook点
 系统服务的Binder,比如IActivityManagerServie,INotificationManagerService等
 ### 动态代理
@@ -271,9 +275,14 @@ MVVM（Model-View-ViewModel）架构：MVVM由MVP的演变而来，它使用Data
 * 松散耦合：ViewModel不涉及任何UI操作和对UI控件的引用，就算把TextView改成EditText，ViewModel也几乎不需要改任何代码.在MVVM中在ViewModel是最为一个处理数据的中间者,因为Model提供的数据可能会很复杂,而View层没法直接显示,经过ViewModel处理后,这些数据能够直接被View接受,且View不知道这些数据是怎么来的,也可对View做单独的单元测试.
 * 团队协作：由于View和ViewModel松散耦合，在开发团队中，可以一个人负责开发UI部分（XML + Activity/Fragment），另外一个人负责开发ViewModel与Model对接，即可形成一个可运行的项目 。
 
+
+### 策略模式
+属性动画中的差值器以及估值器,就是使用了策略模式,策略模式可以将一种算法包装起来供各处使用,但是可能会给系统带来子类爆炸的问题.
 ### 装饰者模式
 给类动态的添加功能和在不需要的时候移除额外的功能,比如Android的Context类族,就是典型的装饰者模式.
 ### 依赖注入
+小系统是对依赖注入的需求是不大的,但是大系统,依赖关系复杂的系统最好使用依赖注入
+
 说到依赖注入(`DI`)，就不得不提控制反转(`IoC`),这两个词总是成对出现.
 
 首先先给出结论。控制反转是一种软件设计思想，它被设计出来用于降低代码之间的耦合，而依赖注入是用来实现控制反转最常见的手段。
@@ -323,8 +332,11 @@ public class MainActivity extends AppCompatActivity
 
 这就是所谓控制反转,它将获得依赖对象的方式反转了.
 
-### 响应式编程(Rxjava)
+### 响应式编程
+#### 为什么要使用Rxjava
+更优雅的异步操作,能够很好的避免回调地狱,并且兼容各种线程模型,流式编程也能很好的将代码的逻辑拆分成尽可能小的组成部分,有助于优化代码的可读性.
 #### 冷观察者&热观察者
+冷观察者订阅后才发送数据,热观察者一直都发送
 #### 操作符
 [操作符大全](https://www.jianshu.com/p/12883e1b59f9)
 #### Flowable背压
@@ -342,3 +354,12 @@ public class MainActivity extends AppCompatActivity
 
 #### 屏幕适配方案AndroidAutoSzie
 [AndroidAutoSzie作者自己的文章](https://www.jianshu.com/p/55e0fca23b4f)
+
+
+
+
+
+
+
+
+

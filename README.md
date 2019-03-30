@@ -30,22 +30,24 @@ fork的进程使用了写时拷贝技术,只有进程空间的内容发生了变
 ### IPC机制
 Android是Linux,Linux有的IPC机制他都有,如信号,Socket,共享内存等
 #### AIDL与Binder
-Binder是C/S架构,有效率优势,Socket/管道/消息队列拷贝内存次数都是2次,Binder是1次,共享内存虽然是0次,但是有太底层,不面向对象,不安全等缺点.Android APP是通过Binder作为Client来访问各种系统服务,AIDL编译成Java文件之后也是使用Binder来执行实际的行为.
+Binder是C/S架构,有效率优势,Socket/管道/消息队列拷贝内存次数都是2次,Binder是1次,共享内存虽然是0次,但是有太底层,不面向对象,不安全等(无法验证双方身份)缺点.Android APP是通过Binder作为Client来访问各种系统服务,AIDL编译成Java文件之后也是使用Binder来执行实际的行为.
 
 [参考文章](https://www.jianshu.com/p/f4f722d3e51d)
 
 #### 文件
 Windows读写文件会占用该文件,但Android是Linux所以默认无锁,可以用文件做进程间通信,但是多进程下读写不可靠,且受I/O速度限制
 #### 管道
-在JNI层,使用pipe调用,得到一个大小为2的int数组,分别对应输入输出端,存的是文件描述符fd,可以像普通文件一样读写他们,管道可选阻塞或者非阻塞模式,阻塞时没有读的内容会阻塞当前线程,pipe是有大小位置不够了会写阻塞,但是不同系统的实现可能会不一样所以大小具体多少我也不知道.
+在JNI层,使用pipe调用,得到一个大小为2的int数组,存的是文件描述符fd,分别对应输入输出端,可以像普通文件一样读写他们,管道可选阻塞或者非阻塞模式,阻塞时没有读的内容会读阻塞,pipe是有大小位置不够了会写阻塞.
 #### Handler的Messager
+底层也是Binder,但是Messager是基于消息队列的,所传递的对象必须可序列化,通过replyTo指定Service应该回复哪一个Messager
+
+[参考文章](https://blog.csdn.net/godbar/article/details/86557753)
 
 ## Android View
 ### Fragment
 [请看我自己总结的私货](https://juejin.im/post/5c921a4d5188252d92095f09)
-### View绘制流程
-
-### View点击事件传递
+### View绘制流程和点击事件传递
+[参考文章](https://www.jianshu.com/p/cf5092fa2694?utm_source=desktop&utm_medium=timeline)
 
 ### 防止重复点击
 使用RxBinding的RxView,但是使用RxView有个缺点,那就是如果那个View是自定义的,就没办法兼容了,结合RxBinding的源码,使用JDK接口的动态代理和RxJava的PublishSubject实现一口气兼容所有接口
@@ -172,8 +174,7 @@ CardView在5.0以下会有白边,并且阴影不显示,需要使用app:cardPreve
 
 GC Roots有这些:
 
-* 通过System Class Loader或者Boot Class 
-* Loader加载的class对象，通过自定义类加载器加载的class不一定是GC Root
+* 通过System Class Loader或者Boot Class Loader加载的class对象，通过自定义类加载器加载的class不一定是GC Root
 * 处于激活状态的线程
 * 栈中的对象
 * JNI栈中的对象
@@ -338,3 +339,6 @@ public class MainActivity extends AppCompatActivity
 
 #### 自动释放->RxLifecycle和AutoDisposable
 果断选AutoDisposable,RxLifecycle需要强制继承基类,入侵性高,AutoDisposable使用Rxjava的as操作符没有入侵性,并且还有IDE提示支持.
+
+#### 屏幕适配方案AndroidAutoSzie
+[AndroidAutoSzie作者自己的文章](https://www.jianshu.com/p/55e0fca23b4f)

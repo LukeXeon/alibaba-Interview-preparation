@@ -1,3 +1,7 @@
+
+本仓库本身就是一个html简历从[@Cong Min](https://github.com/mcc108/resume)处fork，感谢大佬
+
+
 ## Android线程
 ### 为什么要同步
 [请看我朋友薛8一篇文章](https://juejin.im/post/5c8610056fb9a049b222b366)

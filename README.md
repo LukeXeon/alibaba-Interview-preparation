@@ -367,3 +367,203 @@ public class MainActivity extends AppCompatActivity
 
 #### 屏幕适配方案AndroidAutoSzie
 [AndroidAutoSzie作者自己的文章](https://www.jianshu.com/p/55e0fca23b4f)
+
+
+## Java
+* `volatile`理解，JMM中主存和工作内存到底是啥？和JVM各个部分怎么个对应关系？
+* 可见性，原子性，有序性。
+可见性`volatile`,一个线程的修改对另外一个线程是马上可见的,原子性`CAS`要么都做要么都不做,有序性`synchronized`通过进入和退出`Monitor`(观察器)实现,`CPU`可能会乱序执行指令,如果在本线程内观察,所有操作都是有序的,如果在一个线程中观察另一个线程,所有操作都是无序的.[[link](https://blog.csdn.net/qq_33689414/article/details/73527438)]
+* Java锁机制
+java锁机制其实是锁总线
+* Java的常量池？不同String赋值方法，引用是否相等？
+字面值是常量,在字节码中使用id索引,equals相等引用不一定相等,Android上String的构造函数会被虚拟机拦截,重定向到StringFactory
+* HashMap的实现?树化阈值?负载因子?
+数组加链表加红黑树,默认负载因子`0.75`,树化阈值8
+* Java实现无锁同步
+CAS实现`AtomicInteger`等等
+* 单例模式
+1.双重检查
+```
+public class Singleton {
+
+    private static volatile Singleton singleton;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (singleton == null) {
+            synchronized (Singleton.class) {
+                if (singleton == null) {
+                    singleton = new Singleton();
+                }
+            }
+        }
+        return singleton;
+    }
+}
+```
+2.反序列化安全,反射安全
+枚举实现单例,类加载时由JVM保证单例,反序列化不会生成新对象
+*  信号量
+信号量要与一个锁结合使用,当前线程要先获得这个锁,然后等待与这个锁相关联的信号量,此时该锁会被解锁,其他线程可以抢到这个锁,如果其他线程抢到了这个锁,那他可以通知这个信号量,然后释放该锁,如果此时第一个线程抢到了该锁,那么它将从等待处继续执行(应用场景,将异步回调操作封装为变为同步操作,避免回调地狱)
+信号量与锁相比的应用场景不同,锁是服务于共享资源的,而信号量是服务于多个线程间的执行的逻辑顺序的,锁的效率更高一些.
+*  ThreadLocal原理。
+线程上保存着ThreadLocalMap,每个ThreadLocal使用弱引用包装作为Key存入这个Map里,当线程被回收或者没有其他地方引用ThreadLocal时,ThreadLocal也会被回收进而回收其保存的值
+* 软引用,弱引用,虚引用
+软引用内存不够的时候会释放
+弱引用GC时释放
+虚引用,需要和一个引用队列联系在一起使用,引用了跟没引用一样,主要是用来跟GC做一些交互.
+* `ClassLoader`双亲委派机制
+简单来说就是先把加载请求转发到父加载器,父加载器失败了,再自己试着加载
+
+* GC Roots有这些:
+通过System Class Loader或者Boot Class Loader加载的class对象，通过自定义类加载器加载的class不一定是GC Root
+处于激活状态的线程
+栈中的对象
+JNI栈中的对象
+JNI中的全局对象
+正在被用于同步的各种锁对象
+JVM自身持有的对象，比如系统类加载器等。
+* GC算法
+标记-清除算法：
+暂停除了GC线程以外的所有线程,算法分为“标记”和“清除”两个阶段,首先从GC Root开始标记出所有需要回收的对象，在标记完成之后统一回收掉所有被标记的对象。
+
+缺点:
+标记-清除算法的缺点有两个：首先，效率问题，标记和清除效率都不高。其次，标记清除之后会产生大量的不连续的内存碎片，空间碎片太多会导致当程序需要为较大对象分配内存时无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作。
+
+复制算法：
+将可用内存按容量分成大小相等的两块，每次只使用其中一块，当这块内存使用完了，就将还存活的对象复制到另一块内存上去，然后把使用过的内存空间一次清理掉。
+
+优点:
+
+这样使得每次都是对其中一块内存进行回收，内存分配时不用考虑内存碎片等复杂情况，只需要移动堆顶指针，按顺序分配内存即可，实现简单，运行高效。
+
+缺点:
+
+复制算法的缺点显而易见，可使用的内存降为原来一半。
+
+标记-整理算法：
+标记-整理算法在标记-清除算法基础上做了改进，标记阶段是相同的,标记出所有需要回收的对象，在标记完成之后不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，在移动过程中清理掉可回收的对象，这个过程叫做整理。
+
+优点:
+
+标记-整理算法相比标记-清除算法的优点是内存被整理以后不会产生大量不连续内存碎片问题。复制算法在对象存活率高的情况下就要执行较多的复制操作，效率将会变低，而在对象存活率高的情况下使用标记-整理算法效率会大大提高。
+
+分代收集算法：
+是java的虚拟机的垃圾回收算法.基于编程中的一个事实,越新的对象的生存期越短,根据内存中对象的存活周期不同，将内存划分为几块，java的虚拟机中一般把内存划分为新生代和年老代，当新创建对象时一般在新生代中分配内存空间，当新生代垃圾收集器回收几次之后仍然存活的对象会被移动到年老代内存中，当大对象在新生代中无法找到足够的连续内存时也直接在年老代中创建。
+
+## Android
+* Handler、MessageQueue等一套东西讲一下，详细说了下源码。为什么主线程loop不会ANR？
+Android线程模型就是消息循环,Looper关联MessageQueue,不断尝试从MessageQueue取出Message来消费,这个过程可能会被它自己阻塞.而Handler最终都调用enqueueMessage(Message,when)入队的,延迟的实现时当前是时间加上延迟时间给消息指定一个执行的时间点,然后在MessageQueue找到插入位置,此时会判断是否需要唤醒线程来消费消息以及更新下次需要暂停的时间.Message知道要发到哪个Handler是因为Message把Handler保存到了target.Message内部使用链表进行回收复用
+
+* View事件分发机制。
+
+* Window Activity WindowManager View的关系
+
+* Android中使用多线程的方法
+裸new一个Thread(失控线程,不推荐)
+RxJava的调度器(io(优先级比低),密集计算线程(优先级比高,用于执行密集计算任务),安卓主线程,从Looper创建(实际上内部也是创建了Handler))
+Java Executor框架的Executors#newCachedThreadPool(),不会造成资源浪费,60秒没有被使用的线程会被释放
+AsyncTask,内部使用FutureTask实现,通过Handler将结果转发到主线程,默认的Executor是共用的,如果同时执行多个AsyncTask,就可能需要排队,但是可以手动指定Executor解决这个问题,直接new匿名内部类会保存外部类的引用,可能会导致内存泄漏
+Android线程模型提供的Handler和HandlerThread
+使用IntentService
+
+* IntentService和Service的区别
+没什么区别,其实就是开了个HandlerThread,让它不要在主线程跑耗时任务
+
+* RecyclerView复用缓存
+
+* JNI
+可避免的内存拷贝,直接传递对象,到C层是一个jobject的指针,可以使用jmethodID和jfiledID访问方法和字段,无需进行内存拷贝.
+无法避免的内存拷贝,基本类型数组,无法避免拷贝,因为JVM不信任C层的任何内存操作,特别是字符串操作,因为Java的字符串与C/C++的字符串所使用的数据类型是不一样的C/C++使用char一个字节(1字节=8位)或wchar_t是四字节.而jstring和jchar使用的是UTF-16编码使用双字节.(Unicode是兼容ASCII,但不兼容GBK,需要自己转换)
+自己创建的局部引用一定要释放,否则一直持有内存泄漏
+非局部引用方法返回后就会失效,除非创建全局引用,jclass是一个jobject,方法外围使用时需要创建全局引用,jmethodID和jfiledID不需要.
+JNI是通过Java方法映射到C函数实现的,如果使用这种方法,函数必须以C式接口导出(因为C++会对名字做修饰处理),当然也可以在JNI_OnLoad方法中注册.
+JNIEnv是线程独立的,JNI中使用pthread创建的线程没有JNIEnv,需要AttachCurrentThread来获取JNIEnv,不用时要DetachCurrentThread
+
+* C++智能指针
+C++智能指针,智能指针类将一个计数器与类指向的对象相关联，引用计数跟踪该类有多少个对象共享同一指针。每次创建类的新对象时，初始化指针并将引用计数置为1；当对象作为另一对象的副本而创建时，拷贝构造函数拷贝指针并增加与之相应的引用计数；对一个对象进行赋值时，赋值操作符减少左操作数所指对象的引用计数（如果引用计数为减至0，则删除对象），并增加右操作数所指对象的引用计数；调用析构函数时，构造函数减少引用计数（如果引用计数减至0，则删除基础对象）。智能指针就是模拟指针动作的类(它是对象)。所有的智能指针都会重载 -> 和 * 操作符.
+C++的循环引用是在语言层面上是无法避免的,只有在设计时尽可能的避免,比如在可能发生循环引用的地方用weak_ptr代替shared_ptr,weak_ptr(与shared_ptr的区别是他不计引用计数)的lock()可以尝试获取指针,如果存在,则返回一个shared_ptr,否则返回一个保存了nullptr的shared_ptr
+unique_ptr不允许拷贝,删除了有关拷贝语意的运算符和构造函数,但是允许移动
+std::move可以将左值变成右值
+
+## 专业课
+* TCP和UDP的根本区别？
+
+
+## ACM
+### 数组、链表
+* 链表逆序
+```
+    public ListNode reverseList(ListNode head)
+    {
+        if (head == null)
+        {
+            return null;
+        }
+        if (head.next == null)
+        {
+            return head;
+        }
+        ListNode prev = null;
+        ListNode current = head;
+        while (current != null)
+        {
+            ListNode next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        return prev;
+    }
+```
+* 删除排序数组中的重复项
+```
+    public int removeDuplicates(int[] nums)
+    {
+        int length = nums.length;
+        if (length == 0 || length == 1)
+        {
+            return length;
+        }
+        int size = 1;
+        int pre = nums[0];
+        for (int i = 1; i < length; )
+        {
+            if (nums[i] == pre)
+            {
+                i++;
+            } else
+            {
+                pre = nums[size++] = nums[i++];
+            }
+        }
+        return size;
+    }
+```
+* 数组中找到重复元素
+* n个长为n的有序数组，求最大的n个数
+* 用O(1)的时间复杂度删除单链表中的某个节点
+把后一个元素赋值给待删除节点，这样也就相当于是删除了当前元素,只有删除最后一个元素的时间为o(N)平均时间复杂度仍然为O(1)
+* 获得单链表的最后N个元素
+两个指针,第一个先走N步第二个再走,时间复杂度为O(N)[link](https://lueye.iteye.com/blog/2176940)
+* 从长序列中找出前K大的数字
+* 用数组实现双头栈
+* 两个链表求和，返回结果也用链表表示 1 -> 2 -> 3 + 2 -> 3 -> 4 = 3 -> 5 -> 7
+### 树
+* 二叉树某一层有多少个节点
+### 排序
+* 堆排序
+* 快速
+* 归并
+* 冒泡
+
+## 项目
+* QQ视频聊天使用什么协议？
+RTMP实时传输协议
+
+## 提问
+* 面试官是哪个组的？
+* 字节跳动今年是否真的缺人？招聘策略是什么？
+* 面试官认为我存在哪些不足？
+* 面试官是做什么的？
